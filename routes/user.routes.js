@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const User = require("../models/User.model");
+const mongoose = require("mongoose");
 
 //POST/api/user - post request to create a user
 // router.post("/users", (req, res, next) => {
@@ -140,6 +141,24 @@ router.get("/users", (req, res, next) => {
       res.json(allUsers);
     })
     .catch((err) => res.json(err));
+});
+
+// Get /api/users/:userId - retrieves the bookings for a specific user
+router.get("/users/:userId", (req, res, next) => {
+  const { userId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    res.status(400).json({ message: "specified id is not valid" });
+    return;
+  }
+
+  //Each User  document has the `bookings` array holding `_id's` of Bookings documents.
+  // We use .populate() method to swap the `_id's` for the actual booking documents
+  // this will be used to see all the bookings for a specific user
+  User.findById(userId)
+    .populate("bookings")
+    .then((user) => res.status(200).json(user))
+    .catch((error) => res.json(error));
 });
 
 module.exports = router;

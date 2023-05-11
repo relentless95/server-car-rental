@@ -38,16 +38,40 @@ router.post("/bookings", (req, res, next) => {
     .catch((err) => res.json(err));
 });
 
-//Get /api/bookings -retrieve the users booking
-router.get("/bookings/:userId", (req, res, next) => {
-  const { userId } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
-    res.status(400).json({ message: "Specified id is not valid" });
-  }
-  Booking.findById(userId)
+// Get /api/bookings -retrieve all the bookings
+// for the admin
+router.get("/bookings", (req, res, next) => {
+  Booking.find()
     .populate("user")
     .then((allBookings) => {
       res.json(allBookings);
+    });
+});
+
+// Get /api/bookings/user/:userId - retrieves the booking for a user
+router.get("/bookings/user/:userId", (req, res, next) => {
+  const { userId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    res.status(400).json({ message: "Specified id is not valid" });
+    return;
+  }
+  Booking.find({ user: userId })
+    .then((userBookings) => {
+      res.json(userBookings);
+    })
+    .catch((err) => res.json(err));
+});
+
+// Get /api/bookings -retrieve the users booking
+router.put("/bookings/:bookingId", (req, res, next) => {
+  const { bookingId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(bookingId)) {
+    res.status(400).json({ message: "Specified id is not valid" });
+    return;
+  }
+  Booking.findByIdAndUpdate(bookingId, req.body, { new: true })
+    .then((updatedBooking) => {
+      res.json(updatedBooking);
     })
     .catch((err) => res.json(err));
 });
