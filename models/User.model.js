@@ -5,19 +5,22 @@ const userSchema = new Schema(
   {
     email: {
       type: String,
-      required: [true, 'Email is required.'],
+      required: true,
       unique: true,
-      lowercase: true,
-      trim: true
     },
     password: {
       type: String,
-      required: [true, 'Password is required.']
-    }
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    // privateInfo: [{ type: Schema.Types.ObjectId, ref: "privateInfo" }],
   },
   {
-    // this second object adds extra properties: `createdAt` and `updatedAt`    
-    timestamps: true
+    // this second object adds extra properties: `createdAt` and `updatedAt`
+    timestamps: true,
   }
 );
 
