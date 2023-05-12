@@ -48,7 +48,7 @@ router.get("/bookings", (req, res, next) => {
     });
 });
 
-// Get /api/bookings/user/:userId - retrieves the booking for a user
+// GET /api/bookings/user/:userId - retrieves the booking for a user
 router.get("/bookings/user/:userId", (req, res, next) => {
   const { userId } = req.params;
   if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -62,7 +62,7 @@ router.get("/bookings/user/:userId", (req, res, next) => {
     .catch((err) => res.json(err));
 });
 
-// Get /api/bookings -retrieve the users booking
+// PUT /api/bookings -update the users booking
 // should be used by the admin
 router.put("/bookings/:bookingId", (req, res, next) => {
   const { bookingId } = req.params;
@@ -77,20 +77,20 @@ router.put("/bookings/:bookingId", (req, res, next) => {
     .catch((err) => res.json(err));
 });
 
-// Delete /api/bookings/:userId - deletes a booking for a specific user
+// DELETE /api/bookings/:userId - deletes a booking for a specific user
 // should be used by the users to cancel a booking
 router.delete("/bookings/user/:bookingId", (req, res, next) => {
-    const { bookingId } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(bookingId)) {
-      res.status(400).json({ message: "Specified id is not valid" });
-      return;
-    }
-    Booking.findByIdAndRemove({ _id: bookingId }).then(() =>
-      res.json({ message: `Booking with ${bookingId} is removed successfully` })
-    );
-  });
+  const { bookingId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(bookingId)) {
+    res.status(400).json({ message: "Specified id is not valid" });
+    return;
+  }
+  Booking.findByIdAndRemove({ _id: bookingId }).then(() =>
+    res.json({ message: `Booking with booking Id: ${bookingId}, is removed successfully` })
+  );
+});
 
-// // Delete /api/bookings/:userId - deletes a booking for a specific user
+// // DELETE /api/bookings/:userId - deletes a booking for a specific user
 // // should be used by the users to cancel a booking
 // router.delete("/bookings/user/:userId", (req, res, next) => {
 //   const { userId } = req.params;

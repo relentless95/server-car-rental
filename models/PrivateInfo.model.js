@@ -26,7 +26,7 @@ const privateInfoSchema = new Schema({
   //   type:,
   //   required: true,
   // }
-  bookings: [{ type: Schema.Types.ObjectId, ref: "Booking" }],
+  // bookings: [{ type: Schema.Types.ObjectId, ref: "Booking" }],  <--- not sure i need this
   user: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 

@@ -17,7 +17,7 @@ const userSchema = new Schema(
       required: true,
     },
     bookings: [{ type: Schema.Types.ObjectId, ref: "Booking" }],
-    // privateInfo: [{ type: Schema.Types.ObjectId, ref: "privateInfo" }],
+    privateInfo: [{ type: Schema.Types.ObjectId, ref: "PrivateInfo" }],
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
