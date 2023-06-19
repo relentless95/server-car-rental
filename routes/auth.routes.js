@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User.model");
 const mongoose = require("mongoose");
 
+const saltRounds = 10;
+
 // Post auth/signup - Creates a new user in the database
 router.post("/signup", (req, res, next) => {
   const { email, password, username } = req.body;
@@ -76,7 +78,7 @@ router.post("/signup", (req, res, next) => {
 });
 
 // Post /auth/login
-router.post("login", (req, res, next) => {
+router.post("/login", (req, res, next) => {
   const { email, password } = req.body;
 
   // check if email or password are provided as empty string
@@ -99,15 +101,18 @@ router.post("login", (req, res, next) => {
 
       if (passwordCorrect) {
         //Deconstruct the user object to omit the password
+
         const { _id, email, name } = foundUser;
 
         //Create an object that will be set as the token payload
         const payload = { _id, email, name };
 
+        console.log("here", process.env.TOKEN_SECRET);
+
         // Create and sign the token
         const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
           algorithm: "HS256",
-          expiredIn: "6h",
+          expiresIn: "6h",
         });
         console.log(authToken);
 
@@ -118,6 +123,20 @@ router.post("login", (req, res, next) => {
       }
     })
     .catch((err) => res.status(500).json({ message: "Internal Server Error" }));
+});
+
+//GET /auth/verify
+
+//...
+router.get("/verify", isAuthenticated, (req, res, next) => {
+  // create new Route
+  //If JWT token is valid the payload gets decoded by the
+  // isAuthenticated middleware and made available on 'req.payload`
+  console.log(`req.payload`, req.payload);
+
+  //send back the object with user data
+  // previously set as the token payload
+  res.status(200).json(req.payload);
 });
 
 // Get /api/users - get request to test the route
