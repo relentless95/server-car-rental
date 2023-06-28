@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User.model");
 const mongoose = require("mongoose");
 
+const { isAuthenticated } = require("../middleware/jwt.middleware");
+
 const saltRounds = 10;
 
 // Post auth/signup - Creates a new user in the database
